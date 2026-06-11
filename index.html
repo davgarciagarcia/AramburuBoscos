@@ -2,158 +2,275 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Barra Peña - Calculadora</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Barra Peña</title>
 
   <style>
+    :root {
+      --azul: #062b5f;
+      --azul-oscuro: #031a3a;
+      --naranja: #ff9100;
+      --blanco: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial, sans-serif;
       margin: 0;
-      background: #111;
-      color: white;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--azul-oscuro);
+      color: var(--blanco);
     }
 
-    header {
-      background: #ff8c00;
-      color: white;
-      padding: 18px;
-      text-align: center;
-      font-size: 24px;
-      font-weight: bold;
-    }
-
-    main {
-      padding: 16px;
-      max-width: 700px;
+    .app {
+      max-width: 760px;
       margin: auto;
+      padding: 12px;
+    }
+
+    .top {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: linear-gradient(135deg, var(--azul), var(--azul-oscuro));
+      border: 2px solid #23589b;
+      border-radius: 18px;
+      padding: 12px;
+      display: grid;
+      grid-template-columns: 58px 1fr 120px;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .logo {
+      width: 54px;
+      height: 54px;
+      object-fit: contain;
+      background: white;
+      border-radius: 8px;
+      padding: 3px;
+    }
+
+    .total-box {
+      text-align: center;
+    }
+
+    .total-label {
+      font-size: 13px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .total {
+      font-size: clamp(34px, 10vw, 64px);
+      font-weight: bold;
+      color: var(--naranja);
+      line-height: 1;
+    }
+
+    .reset {
+      background: var(--naranja);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      padding: 12px 8px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
     }
 
     h2 {
-      color: #ff8c00;
-      border-bottom: 2px solid #ff8c00;
+      color: var(--naranja);
+      font-size: 26px;
+      margin: 22px 0 10px;
+      border-bottom: 3px solid var(--naranja);
       padding-bottom: 6px;
     }
 
     .item {
       display: grid;
-      grid-template-columns: 1fr 80px 100px;
-      gap: 10px;
+      grid-template-columns: 1fr 80px 130px;
+      gap: 8px;
       align-items: center;
-      padding: 10px 0;
-      border-bottom: 1px solid #333;
+      padding: 10px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid #23589b;
+      border-radius: 12px;
+      margin-bottom: 8px;
+    }
+
+    .name {
+      font-size: clamp(17px, 4.5vw, 24px);
+      font-weight: bold;
     }
 
     .price {
-      color: #ff8c00;
+      color: var(--naranja);
+      font-size: clamp(17px, 4.5vw, 22px);
       font-weight: bold;
       text-align: right;
     }
 
-    input {
-      width: 70px;
-      font-size: 18px;
-      text-align: center;
-      padding: 6px;
-      border-radius: 6px;
-      border: none;
+    .controls {
+      display: grid;
+      grid-template-columns: 40px 48px 40px;
+      border: 1px solid #3471bd;
+      border-radius: 12px;
+      overflow: hidden;
     }
 
-    .total {
-      position: sticky;
-      bottom: 0;
-      background: #000;
-      border-top: 3px solid #ff8c00;
-      padding: 18px;
-      text-align: center;
-      font-size: 28px;
-      font-weight: bold;
-    }
-
-    button {
-      width: 100%;
-      padding: 14px;
-      margin-top: 20px;
-      font-size: 18px;
-      border: none;
-      border-radius: 8px;
-      background: #ff8c00;
+    .controls button {
+      background: #0b3b7c;
       color: white;
+      border: none;
+      font-size: 26px;
       font-weight: bold;
+      padding: 8px 0;
+      cursor: pointer;
+    }
+
+    .qty {
+      background: #031f45;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      padding: 8px 0;
+    }
+
+    @media (max-width: 430px) {
+      .top {
+        grid-template-columns: 48px 1fr 96px;
+      }
+
+      .logo {
+        width: 46px;
+        height: 46px;
+      }
+
+      .reset {
+        font-size: 13px;
+        padding: 10px 6px;
+      }
+
+      .item {
+        grid-template-columns: 1fr;
+      }
+
+      .price {
+        text-align: left;
+      }
+
+      .controls {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
     }
   </style>
 </head>
 
 <body>
+  <div class="app">
 
-<header>
-  Barra Peña - Calculadora
-</header>
+    <div class="top">
+      <img class="logo" src="escudo.png" alt="Escudo Peña Aramburu Boscos">
 
-<main>
+      <div class="total-box">
+        <div class="total-label">TOTAL</div>
+        <div class="total" id="total">0,00 €</div>
+      </div>
 
-  <h2>Pinchos</h2>
+      <button class="reset" onclick="nuevaCuenta()">NUEVA<br>CUENTA</button>
+    </div>
 
-  <div id="items"></div>
+    <h2>PINCHOS</h2>
+    <div id="pinchos"></div>
 
-  <button onclick="resetear()">Nueva cuenta</button>
+    <h2>BEBIDAS</h2>
+    <div id="bebidas"></div>
 
-</main>
+  </div>
 
-<div class="total">
-  Total: <span id="total">0,00 €</span>
-</div>
+  <script>
+    const productos = {
+      pinchos: [
+        ["Morcilla", 1.70],
+        ["Chorizo", 1.70],
+        ["Tortilla", 1.70],
+        ["Morro", 1.70],
+        ["Perrito", 2.50],
+        ["Mini hamburguesa", 2.50],
+        ["Brocheta de gambas", 2.50]
+      ],
+      bebidas: [
+        ["Vaso de vino tinto/blanco", 1.30],
+        ["Mosto y agua", 1.00],
+        ["Caña / caña con limón", 1.50],
+        ["Refrescos", 1.70],
+        ["Cachi cerveza / cerveza con limón", 4.50],
+        ["Cachi de calimocho", 4.50]
+      ]
+    };
 
-<script>
-const productos = [
-  { nombre: "Morcilla", precio: 1.70 },
-  { nombre: "Chorizo", precio: 1.70 },
-  { nombre: "Tortilla", precio: 1.70 },
-  { nombre: "Morro", precio: 1.70 },
-  { nombre: "Perrito", precio: 2.50 },
-  { nombre: "Mini hamburguesa", precio: 2.50 },
-  { nombre: "Brocheta de gambas", precio: 2.50 },
+    let cantidades = {};
 
-  { nombre: "Vaso de vino tinto/blanco", precio: 1.30 },
-  { nombre: "Mosto y agua", precio: 1.00 },
-  { nombre: "Caña / caña con limón", precio: 1.50 },
-  { nombre: "Refrescos", precio: 1.70 },
-  { nombre: "Cachi cerveza / cerveza con limón", precio: 4.50 },
-  { nombre: "Cachi de calimocho", precio: 4.50 }
-];
+    function crearItem(nombre, precio) {
+      cantidades[nombre] = 0;
 
-const contenedor = document.getElementById("items");
+      const div = document.createElement("div");
+      div.className = "item";
 
-productos.forEach((producto, index) => {
-  const div = document.createElement("div");
-  div.className = "item";
+      div.innerHTML = `
+        <div class="name">${nombre}</div>
+        <div class="price">${precio.toFixed(2).replace(".", ",")} €</div>
+        <div class="controls">
+          <button onclick="cambiar('${nombre}', -1)">−</button>
+          <div class="qty" id="qty-${nombre}">0</div>
+          <button onclick="cambiar('${nombre}', 1)">+</button>
+        </div>
+      `;
 
-  div.innerHTML = `
-    <div>${producto.nombre}</div>
-    <div class="price">${producto.precio.toFixed(2).replace(".", ",")} €</div>
-    <input type="number" min="0" value="0" data-index="${index}" onchange="calcular()" oninput="calcular()">
-  `;
+      return div;
+    }
 
-  contenedor.appendChild(div);
-});
+    function cargarProductos() {
+      productos.pinchos.forEach(p => {
+        document.getElementById("pinchos").appendChild(crearItem(p[0], p[1]));
+      });
 
-function calcular() {
-  let total = 0;
+      productos.bebidas.forEach(p => {
+        document.getElementById("bebidas").appendChild(crearItem(p[0], p[1]));
+      });
+    }
 
-  document.querySelectorAll("input").forEach(input => {
-    const cantidad = Number(input.value);
-    const index = input.dataset.index;
-    total += cantidad * productos[index].precio;
-  });
+    function cambiar(nombre, cambio) {
+      cantidades[nombre] = Math.max(0, cantidades[nombre] + cambio);
+      document.getElementById(`qty-${nombre}`).textContent = cantidades[nombre];
+      calcularTotal();
+    }
 
-  document.getElementById("total").textContent =
-    total.toFixed(2).replace(".", ",") + " €";
-}
+    function calcularTotal() {
+      let total = 0;
 
-function resetear() {
-  document.querySelectorAll("input").forEach(input => input.value = 0);
-  calcular();
-}
-</script>
+      [...productos.pinchos, ...productos.bebidas].forEach(([nombre, precio]) => {
+        total += cantidades[nombre] * precio;
+      });
 
+      document.getElementById("total").textContent =
+        total.toFixed(2).replace(".", ",") + " €";
+    }
+
+    function nuevaCuenta() {
+      Object.keys(cantidades).forEach(nombre => {
+        cantidades[nombre] = 0;
+        document.getElementById(`qty-${nombre}`).textContent = 0;
+      });
+
+      calcularTotal();
+    }
+
+    cargarProductos();
+  </script>
 </body>
 </html>
