@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Barra Peña - Calculadora</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #111;
+      color: white;
+    }
+
+    header {
+      background: #ff8c00;
+      color: white;
+      padding: 18px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    main {
+      padding: 16px;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    h2 {
+      color: #ff8c00;
+      border-bottom: 2px solid #ff8c00;
+      padding-bottom: 6px;
+    }
+
+    .item {
+      display: grid;
+      grid-template-columns: 1fr 80px 100px;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #333;
+    }
+
+    .price {
+      color: #ff8c00;
+      font-weight: bold;
+      text-align: right;
+    }
+
+    input {
+      width: 70px;
+      font-size: 18px;
+      text-align: center;
+      padding: 6px;
+      border-radius: 6px;
+      border: none;
+    }
+
+    .total {
+      position: sticky;
+      bottom: 0;
+      background: #000;
+      border-top: 3px solid #ff8c00;
+      padding: 18px;
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 20px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      background: #ff8c00;
+      color: white;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  Barra Peña - Calculadora
+</header>
+
+<main>
+
+  <h2>Pinchos</h2>
+
+  <div id="items"></div>
+
+  <button onclick="resetear()">Nueva cuenta</button>
+
+</main>
+
+<div class="total">
+  Total: <span id="total">0,00 €</span>
+</div>
+
+<script>
+const productos = [
+  { nombre: "Morcilla", precio: 1.70 },
+  { nombre: "Chorizo", precio: 1.70 },
+  { nombre: "Tortilla", precio: 1.70 },
+  { nombre: "Morro", precio: 1.70 },
+  { nombre: "Perrito", precio: 2.50 },
+  { nombre: "Mini hamburguesa", precio: 2.50 },
+  { nombre: "Brocheta de gambas", precio: 2.50 },
+
+  { nombre: "Vaso de vino tinto/blanco", precio: 1.30 },
+  { nombre: "Mosto y agua", precio: 1.00 },
+  { nombre: "Caña / caña con limón", precio: 1.50 },
+  { nombre: "Refrescos", precio: 1.70 },
+  { nombre: "Cachi cerveza / cerveza con limón", precio: 4.50 },
+  { nombre: "Cachi de calimocho", precio: 4.50 }
+];
+
+const contenedor = document.getElementById("items");
+
+productos.forEach((producto, index) => {
+  const div = document.createElement("div");
+  div.className = "item";
+
+  div.innerHTML = `
+    <div>${producto.nombre}</div>
+    <div class="price">${producto.precio.toFixed(2).replace(".", ",")} €</div>
+    <input type="number" min="0" value="0" data-index="${index}" onchange="calcular()" oninput="calcular()">
+  `;
+
+  contenedor.appendChild(div);
+});
+
+function calcular() {
+  let total = 0;
+
+  document.querySelectorAll("input").forEach(input => {
+    const cantidad = Number(input.value);
+    const index = input.dataset.index;
+    total += cantidad * productos[index].precio;
+  });
+
+  document.getElementById("total").textContent =
+    total.toFixed(2).replace(".", ",") + " €";
+}
+
+function resetear() {
+  document.querySelectorAll("input").forEach(input => input.value = 0);
+  calcular();
+}
+</script>
+
+</body>
+</html>
